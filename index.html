@@ -42,10 +42,9 @@ body {
 .login-page {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  /* Gambar background hitam-emas mewah dengan overlay gelap agar teks terbaca */
   background-image: 
     linear-gradient(135deg, rgba(10, 10, 10, 0.88) 0%, rgba(5, 5, 5, 0.94) 100%),
-    url('https://ibb.co/SwRrWwmq');
+    url('https://images.unsplash.com/photo-1615962122149-efde997fac8d?q=80&w=2070&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -235,6 +234,11 @@ th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600; co
 td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
 tr:hover td { background: rgba(255, 215, 0, 0.02); }
 
+/* Table Footer for Totals */
+tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; border-top: 2px solid var(--border-gold); background: rgba(255, 215, 0, 0.03); }
+tfoot tr:last-child td { border-bottom: none; }
+.tfoot-label { text-align: right; color: var(--text-secondary); }
+
 .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
 .badge-income { background: rgba(0, 214, 143, 0.1); color: var(--green); border: 1px solid rgba(0, 214, 143, 0.2); }
 .badge-expense { background: rgba(255, 77, 77, 0.1); color: var(--red); border: 1px solid rgba(255, 77, 77, 0.2); }
@@ -349,8 +353,8 @@ tr:hover td { background: rgba(255, 215, 0, 0.02); }
       <div class="menu-label">Menu Utama</div>
       <div class="menu-item active" data-view="dashboard" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i><span>Dashboard</span></div>
       <div class="menu-item" data-view="assets" onclick="switchView('assets')"><i class="fas fa-gem"></i><span>Aset Pribadi</span></div>
+      <div class="menu-item" data-view="category" onclick="switchView('category')"><i class="fas fa-tags"></i><span>Kategori & Total</span></div>
       <div class="menu-item"><i class="fas fa-exchange-alt"></i><span>Transaksi</span></div>
-      <div class="menu-item"><i class="fas fa-tags"></i><span>Kategori</span></div>
       
       <div class="menu-label">Lainnya</div>
       <div class="menu-item"><i class="fas fa-cog"></i><span>Pengaturan</span></div>
@@ -483,6 +487,7 @@ tr:hover td { background: rgba(255, 215, 0, 0.02); }
               </tr>
             </thead>
             <tbody id="transactionTable"></tbody>
+            <tfoot id="transactionTfoot"></tfoot>
           </table>
         </div>
       </div>
@@ -500,7 +505,7 @@ tr:hover td { background: rgba(255, 215, 0, 0.02); }
         <div class="stat-card">
           <div class="stat-icon cash"><i class="fas fa-money-bill-wave"></i></div>
           <div class="stat-label">Aset Likuid (Kas)</div>
-          <div class="stat-value positive" idaset="liquidAsset" id="totalLikuid">Rp 0</div>
+          <div class="stat-value positive" id="totalLikuid">Rp 0</div>
           <div class="stat-meta">Tabungan & Kas</div>
         </div>
         <div class="stat-card">
@@ -571,6 +576,29 @@ tr:hover td { background: rgba(255, 215, 0, 0.02); }
               </tr>
             </thead>
             <tbody id="assetTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CATEGORY VIEW ===== -->
+    <section id="categoryView" class="view-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-layer-group"></i> Ringkasan Kategori & Total Keuangan</div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Kategori / Jenis</th>
+                <th>Tipe</th>
+                <th>Jumlah Item</th>
+                <th>Total Nilai</th>
+              </tr>
+            </thead>
+            <tbody id="categoryTable"></tbody>
+            <tfoot id="categoryTfoot"></tfoot>
           </table>
         </div>
       </div>
@@ -683,9 +711,12 @@ function switchView(viewName) {
   } else if(viewName === 'assets') {
     document.getElementById('pageTitle').textContent = 'Aset Pribadi';
     document.getElementById('pageSubtitle').textContent = 'Kelola dan pantau perkembangan aset Anda';
+  } else if(viewName === 'category') {
+    document.getElementById('pageTitle').textContent = 'Kategori & Total';
+    document.getElementById('pageSubtitle').textContent = 'Rekapitulasi total pemasukan, pengeluaran, dan aset per kategori';
+    renderCategory(); // Render category table when viewed
   }
   
-  // Close sidebar on mobile
   document.getElementById('sidebar').classList.remove('open');
 }
 
@@ -792,6 +823,7 @@ function confirmDelete() {
 function renderAll() {
   renderDashboard();
   renderAssets();
+  renderCategory();
 }
 
 function renderDashboard() {
@@ -812,16 +844,20 @@ function renderDashboard() {
   document.getElementById('pengeluaranCount').textContent = `${transactions.filter(t => t.type === 'PENGELUARAN').length} transaksi`;
   document.getElementById('transactionCount').textContent = `${transactions.length} transaksi`;
   
-  renderTransactionTable();
+  renderTransactionTable(income, expense, balance);
   renderCashFlowChart(income, expense);
 }
 
-function renderTransactionTable() {
-  const tbody = document.getElementById('transactionTable');
+function renderTransactionTable(totalIncome, totalExpense, balance) {
+  const tbody = document.getElementById('transactionTable");
+  const tfoot = document.getElementById('transactionTfoot');
+  
   if (transactions.length === 0) {
     tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-inbox"></i><p>Belum ada transaksi.</p></div></td></tr>`;
+    tfoot.innerHTML = '';
     return;
   }
+  
   tbody.innerHTML = transactions.map((t, i) => {
     const date = new Date(t.date);
     const dateStr = date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -838,6 +874,25 @@ function renderTransactionTable() {
       </tr>
     `;
   }).join('');
+
+  // Add totals to footer
+  tfoot.innerHTML = `
+    <tr>
+      <td colspan="4" class="tfoot-label">Total Pemasukan:</td>
+      <td class="amount-income">+ ${formatCurrency(totalIncome)}</td>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <td colspan="4" class="tfoot-label">Total Pengeluaran:</td>
+      <td class="amount-expense">− ${formatCurrency(totalExpense)}</td>
+      <td colspan="2"></td>
+    </tr>
+    <tr style="background: rgba(255, 215, 0, 0.05);">
+      <td colspan="4" class="tfoot-label" style="color: var(--gold);">Total Saldo (Selisih):</td>
+      <td style="color: ${balance >= 0 ? 'var(--green)' : 'var(--red)'}; font-weight: 800;">${formatCurrency(balance)}</td>
+      <td colspan="2"></td>
+    </tr>
+  `;
 }
 
 function renderCashFlowChart(income, expense) {
@@ -903,7 +958,6 @@ function renderAssetChart() {
   const ctx = document.getElementById('assetChart').getContext('2d');
   if (assetChart) assetChart.destroy();
 
-  // Group by type
   const grouped = assets.reduce((acc, a) => {
     acc[a.type] = (acc[a.type] || 0) + a.value;
     return acc;
@@ -960,6 +1014,94 @@ function renderAssetChart() {
       }
     }
   });
+}
+
+// ===== Category & Totals Rendering =====
+function renderCategory() {
+  const tbody = document.getElementById('categoryTable');
+  const tfoot = document.getElementById('categoryTfoot');
+  
+  // Group transactions by category and type
+  const groupedTrans = {};
+  transactions.forEach(t => {
+    const key = `${t.category}__${t.type}`;
+    if (!groupedTrans[key]) {
+      groupedTrans[key] = { name: t.category, type: t.type, count: 0, total: 0 };
+    }
+    groupedTrans[key].count++;
+    groupedTrans[key].total += t.amount;
+  });
+
+  // Group assets by type
+  const groupedAssets = {};
+  assets.forEach(a => {
+    if (!groupedAssets[a.type]) {
+      groupedAssets[a.type] = { name: a.type, type: 'ASET', count: 0, total: 0 };
+    }
+    groupedAssets[a.type].count++;
+    groupedAssets[a.type].total += a.value;
+  });
+
+  let html = '';
+  
+  // Render transaction rows
+  Object.values(groupedTrans).forEach(item => {
+    html += `
+      <tr>
+        <td style="font-weight: 500;">${item.name}</td>
+        <td><span class="badge ${item.type === 'PEMASUKAN' ? 'badge-income' : 'badge-expense'}">${item.type}</span></td>
+        <td style="color: var(--text-muted);">${item.count} transaksi</td>
+        <td class="amount-${item.type === 'PEMASUKAN' ? 'income' : 'expense'}">${formatCurrency(item.total)}</td>
+      </tr>
+    `;
+  });
+
+  // Render asset rows
+  Object.values(groupedAssets).forEach(item => {
+    html += `
+      <tr>
+        <td style="font-weight: 500;">${item.name}</td>
+        <td><span class="badge badge-asset">${item.type}</span></td>
+        <td style="color: var(--text-muted);">${item.count} aset</td>
+        <td class="amount-asset">${formatCurrency(item.total)}</td>
+      </tr>
+    `;
+  });
+
+  if (html === '') {
+    html = `<tr><td colspan="4"><div class="empty-state"><i class="fas fa-folder-open"></i><p>Belum ada data untuk diringkas.</p></div></td></tr>`;
+  }
+  tbody.innerHTML = html;
+
+  // Calculate Grand Totals
+  const totalIncome = transactions.filter(t => t.type === 'PEMASUKAN').reduce((s, t) => s + t.amount, 0);
+  const totalExpense = transactions.filter(t => t.type === 'PENGELUARAN').reduce((s, t) => s + t.amount, 0);
+  const cashBalance = totalIncome - totalExpense;
+  const totalAssets = assets.reduce((s, a) => s + a.value, 0);
+  const netWorth = totalAssets + cashBalance;
+
+  tfoot.innerHTML = `
+    <tr>
+      <td colspan="3" class="tfoot-label">Total Pemasukan:</td>
+      <td class="amount-income">${formatCurrency(totalIncome)}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="tfoot-label">Total Pengeluaran:</td>
+      <td class="amount-expense">${formatCurrency(totalExpense)}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="tfoot-label">Saldo Kas (Pemasukan - Pengeluaran):</td>
+      <td style="color: ${cashBalance >= 0 ? 'var(--green)' : 'var(--red)'};">${formatCurrency(cashBalance)}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="tfoot-label">Total Aset:</td>
+      <td class="amount-asset">${formatCurrency(totalAssets)}</td>
+    </tr>
+    <tr style="border-top: 2px solid var(--border-gold); background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent);">
+      <td colspan="3" class="tfoot-label" style="color: var(--gold); font-size: 16px;">Kekayaan Bersih (Aset + Saldo Kas):</td>
+      <td style="color: var(--gold); font-size: 16px; font-weight: 800;">${formatCurrency(netWorth)}</td>
+    </tr>
+  `;
 }
 
 // ===== Utils =====
