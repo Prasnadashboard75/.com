@@ -308,7 +308,8 @@ tfoot tr:last-child td { border-bottom: none; }
     <h1 class="font-display text-3xl font-bold text-center mb-2">Welcome Back!</h1>
     <p class="text-center text-sm text-gray-400 mb-8 tracking-widest uppercase">Portal Dashboard Keuangan</p>
     
-    <form id="loginForm">
+    <!-- Form login diubah untuk memanggil fungsi langsung di tombol -->
+    <form id="loginForm" onsubmit="return false;">
       <div class="input-group">
         <label>User ID</label>
         <div class="input-wrapper">
@@ -325,7 +326,7 @@ tfoot tr:last-child td { border-bottom: none; }
         </div>
       </div>
       
-      <button type="submit" class="btn-login">Masuk</button>
+      <button type="button" class="btn-login" onclick="handleLogin()">Masuk</button>
     </form>
     
     <div class="login-hint">
@@ -629,22 +630,38 @@ let deleteTarget = { type: '', id: null };
 let cashFlowChart = null;
 let assetChart = null;
 
+// ===== Safe Storage Wrapper =====
+// Mencegah error jika browser memblokir localStorage
+const safeStorage = {
+  getItem: function(key) {
+    try { return localStorage.getItem(key); } 
+    catch(e) { return null; }
+  },
+  setItem: function(key, value) {
+    try { localStorage.setItem(key, value); } 
+    catch(e) { /* do nothing */ }
+  }
+};
+
 // ===== Init =====
 function init() {
-  createParticles();
-  setCurrentDate();
-  loadData();
-  
-  if (sessionStorage.getItem('isLoggedIn') === 'true') {
-    showDashboard();
+  try {
+    createParticles();
+    setCurrentDate();
+    loadData();
+    
+    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+      showDashboard();
+    }
+  } catch (e) {
+    console.error("Init error:", e);
   }
-  
-  document.getElementById('loginForm').addEventListener('submit', handleLogin);
 }
 
 // ===== Particles =====
 function createParticles() {
   const container = document.getElementById('particles');
+  if(!container) return;
   for (let i = 0; i < 40; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
@@ -664,24 +681,32 @@ function setCurrentDate() {
   const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   const now = new Date();
-  document.getElementById('currentDate').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  const el = document.getElementById('currentDate');
+  if(el) el.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
 
 // ===== Login =====
-function handleLogin(e) {
-  e.preventDefault();
-  const userId = document.getElementById('userId').value.trim();
-  const password = document.getElementById('password').value.trim();
+// DIPERBAIKI: Fungsi langsung dipanggil oleh tombol, tidak lagi pakai event listener form
+function handleLogin() {
+  const userIdEl = document.getElementById('userId');
+  const passwordEl = document.getElementById('password');
+  
+  if(!userIdEl || !passwordEl) return;
+  
+  const userId = userIdEl.value.trim();
+  const password = passwordEl.value.trim();
   
   if (userId === 'admin' && password === 'admin123') {
-    sessionStorage.setItem('isLoggedIn', 'true');
+    try { sessionStorage.setItem('isLoggedIn', 'true'); } catch(e) {}
     showToast('Berhasil masuk! Selamat datang kembali.', 'success');
     setTimeout(() => showDashboard(), 600);
   } else {
     showToast('User ID atau password salah!', 'error');
     const card = document.querySelector('.login-card');
-    card.style.animation = 'shake 0.5s';
-    setTimeout(() => card.style.animation = '', 500);
+    if(card) {
+      card.style.animation = 'shake 0.5s';
+      setTimeout(() => card.style.animation = '', 500);
+    }
   }
 }
 
@@ -692,7 +717,7 @@ function showDashboard() {
 }
 
 function logout() {
-  sessionStorage.removeItem('isLoggedIn');
+  try { sessionStorage.removeItem('isLoggedIn'); } catch(e) {}
   location.reload();
 }
 
@@ -713,7 +738,7 @@ function switchView(viewName) {
   } else if(viewName === 'category') {
     document.getElementById('pageTitle').textContent = 'Kategori & Total';
     document.getElementById('pageSubtitle').textContent = 'Rekapitulasi total pemasukan, pengeluaran, dan aset per kategori';
-    renderCategory(); // Render category table when viewed
+    renderCategory(); 
   }
   
   document.getElementById('sidebar').classList.remove('open');
@@ -721,7 +746,7 @@ function switchView(viewName) {
 
 // ===== Data Management =====
 function loadData() {
-  const savedTrans = localStorage.getItem('transactions');
+  const savedTrans = safeStorage.getItem('transactions');
   if (savedTrans) {
     transactions = JSON.parse(savedTrans);
   } else {
@@ -735,7 +760,7 @@ function loadData() {
     saveTransactions();
   }
 
-  const savedAssets = localStorage.getItem('assets');
+  const savedAssets = safeStorage.getItem('assets');
   if (savedAssets) {
     assets = JSON.parse(savedAssets);
   } else {
@@ -748,8 +773,8 @@ function loadData() {
   }
 }
 
-function saveTransactions() { localStorage.setItem('transactions', JSON.stringify(transactions)); }
-function saveAssets() { localStorage.setItem('assets', JSON.stringify(assets)); }
+function saveTransactions() { safeStorage.setItem('transactions', JSON.stringify(transactions)); }
+function saveAssets() { safeStorage.setItem('assets', JSON.stringify(assets)); }
 
 // ===== Transactions =====
 function addTransaction(type) {
@@ -822,7 +847,6 @@ function confirmDelete() {
 function renderAll() {
   renderDashboard();
   renderAssets();
-  renderCategory();
 }
 
 function renderDashboard() {
@@ -874,7 +898,6 @@ function renderTransactionTable(totalIncome, totalExpense, balance) {
     `;
   }).join('');
 
-  // Add totals to footer
   tfoot.innerHTML = `
     <tr>
       <td colspan="4" class="tfoot-label">Total Pemasukan:</td>
@@ -1020,7 +1043,6 @@ function renderCategory() {
   const tbody = document.getElementById('categoryTable');
   const tfoot = document.getElementById('categoryTfoot');
   
-  // Group transactions by category and type
   const groupedTrans = {};
   transactions.forEach(t => {
     const key = `${t.category}__${t.type}`;
@@ -1031,7 +1053,6 @@ function renderCategory() {
     groupedTrans[key].total += t.amount;
   });
 
-  // Group assets by type
   const groupedAssets = {};
   assets.forEach(a => {
     if (!groupedAssets[a.type]) {
@@ -1043,7 +1064,6 @@ function renderCategory() {
 
   let html = '';
   
-  // Render transaction rows
   Object.values(groupedTrans).forEach(item => {
     html += `
       <tr>
@@ -1055,7 +1075,6 @@ function renderCategory() {
     `;
   });
 
-  // Render asset rows
   Object.values(groupedAssets).forEach(item => {
     html += `
       <tr>
@@ -1072,7 +1091,6 @@ function renderCategory() {
   }
   tbody.innerHTML = html;
 
-  // Calculate Grand Totals
   const totalIncome = transactions.filter(t => t.type === 'PEMASUKAN').reduce((s, t) => s + t.amount, 0);
   const totalExpense = transactions.filter(t => t.type === 'PENGELUARAN').reduce((s, t) => s + t.amount, 0);
   const cashBalance = totalIncome - totalExpense;
@@ -1130,6 +1148,7 @@ function animateValue(elementId, target, formatter) {
 
 function showToast(message, type = 'success') {
   const container = document.getElementById('toastContainer');
+  if(!container) return;
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
@@ -1146,7 +1165,7 @@ function toggleSidebar() {
 }
 
 // Start App
-document.addEventListener('DOMContentLoaded', init);
+window.onload = init;
 </script>
 </body>
 </html>
