@@ -8,57 +8,50 @@
 <!-- ===== SCRIPT LOGO APLIKASI (APP ICON) ===== -->
 <!-- Ganti link di bawah ini dengan link gambar logo Anda (ukuran 192x192 atau 512x512 px) -->
 <link rel="apple-touch-icon" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
-<link rel="icon" type="image/png" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
-<link rel="shortcut icon" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
+<link rel="icon" type="image/png" href="https://ibb.co/wZBGW9G1">
+<link rel="shortcut icon" href="https://ibb.co/wZBGW9G1">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-/* ===== TEMA: PURE BLACK & GOLD ===== */
 :root {
-  --bg-dark: #000000; /* Hitam Pekat Murni */
-  --bg-card: #0a0a0a; /* Hitam Agak Terang */
+  --bg-dark: #000000; 
+  --bg-card: #0a0a0a; 
   --bg-elevated: #111111;
-  --gold: #FFD700; /* Emas Cerah */
+  --gold: #FFD700; 
   --gold-soft: #DAA520; 
   --gold-bright: #FFE55C; 
   --gold-dark: #B8860B;
   --border-gold: rgba(255, 215, 0, 0.25);
-  --text-primary: #FFD700; /* Teks Utama Keemasan */
-  --text-secondary: #ffffff; /* Teks Sekunder Putih */
+  --text-primary: #FFD700; 
+  --text-secondary: #ffffff; 
   --text-muted: #888888;
   --green: #00d68f; 
   --red: #ff4d4d; 
   --blue: #4d8dff;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; }
 .font-display { font-family: 'Playfair Display', serif; }
 
-/* CSS UNTUK LOGO APLIKASI */
-.app-logo {
-    width: 80px; height: 80px; object-fit: cover; border-radius: 50%; 
-    border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.5); 
-    background-color: #000; display: block; margin: 0 auto 20px; transition: transform 0.3s ease;
-}
+/* CSS LOGO */
+.app-logo { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); background-color: #000; display: block; margin: 0 auto 20px; transition: transform 0.3s; }
 .app-logo:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
-.sidebar-logo-img {
-    width: 45px; height: 45px; object-fit: cover; border-radius: 12px; 
-    border: 1px solid var(--gold); box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2); background-color: #000;
-}
+.sidebar-logo-img { width: 45px; height: 45px; object-fit: cover; border-radius: 12px; border: 1px solid var(--gold); box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2); background-color: #000; }
 
-/* LOGIN PAGE */
-.login-page { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-  background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.95) 100%), url('https://images.unsplash.com/photo-1615962122149-efde997fac8d?q=80&w=2070&auto=format&fit=crop');
-  background-size: cover; background-position: center; z-index: 100; padding: 20px; }
+/* LOGIN PAGE - GANTI LINK BACKGROUND DI BAWAH INI */
+.login-page { 
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.95) 100%), url('https://lh3.googleusercontent.com/d/1hZmjAuONeBc5fS_g_9v8K4no6hiNZ7y3');
+  background-size: cover; background-position: center; z-index: 100; padding: 20px; 
+}
 .login-page::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.08) 0%, transparent 40%); pointer-events: none; }
 .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .particle { position: absolute; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255, 215, 0, 0.5); animation: floatUp linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 1; transform: translateY(90vh) scale(1); } 90% { opacity: 1; } 100% { transform: translateY(-10vh) scale(0); opacity: 0; } }
-.login-card { position: relative; z-index: 10; width: 100%; max-width: 400px; padding: 40px 30px; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--border-gold); border-radius: 20px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.05); animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.login-card { position: relative; z-index: 10; width: 100%; max-width: 400px; padding: 40px 30px; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--border-gold); border-radius: 20px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5); animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes cardAppear { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 .input-group { position: relative; margin-bottom: 18px; }
@@ -86,14 +79,13 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border-gold); }
 .user-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; background: rgba(255, 215, 0, 0.03); }
 
-.main-content { flex: 1; margin-left: 260px; padding: 24px; min-height: 100vh; padding-bottom: 80px; transition: margin 0.3s ease; }
+.main-content { flex: 1; margin-left: 260px; padding: 24px; min-height: 100vh; padding-bottom: 80px; }
 .view-section { display: none; animation: fadeIn 0.4s ease; }
 .view-section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
 .page-title h2 { font-size: 24px; font-weight: 800; font-family: 'Playfair Display', serif; color: var(--gold); }
 .page-title p { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-
 .header-actions { display: flex; align-items: center; gap: 12px; }
 .date-badge { padding: 8px 14px; background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 10px; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
 
@@ -107,7 +99,6 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 .stat-value { font-size: 26px; font-weight: 800; font-family: 'Playfair Display', serif; }
 .stat-value.positive { color: var(--green); } .stat-value.negative { color: var(--red); } .stat-value.gold { color: var(--gold); } .stat-value.blue { color: var(--blue); }
 .stat-icon { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-
 .content-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
 .card { background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 16px; padding: 20px; margin-bottom: 24px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -144,7 +135,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 .badge-income { background: rgba(0, 214, 143, 0.1); color: var(--green); } .badge-expense { background: rgba(255, 77, 77, 0.1); color: var(--red); } .badge-asset { background: rgba(77, 141, 255, 0.1); color: var(--blue); }
 .amount-income { color: var(--green); font-weight: 700; } .amount-expense { color: var(--red); font-weight: 700; } .amount-asset { color: var(--blue); font-weight: 700; }
 .action-btns { display: flex; gap: 8px; }
-.btn-icon { width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 1px solid transparent; }
+.btn-icon { width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 1px solid transparent; background: transparent; color: var(--gold); }
 .btn-delete { background: rgba(255, 77, 77, 0.1); border-color: rgba(255, 77, 77, 0.2); color: var(--red); }
 .btn-edit { background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.2); color: var(--gold); }
 .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
@@ -156,7 +147,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes slideOut { to { transform: translateX(100%); opacity: 0; } }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal { background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 16px; padding: 28px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 0 40px rgba(255, 215, 0, 0.05); }
+.modal { background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 16px; padding: 28px; width: 100%; max-width: 400px; text-align: center; }
 .modal.wide { max-width: 480px; }
 .modal-icon { width: 50px; height: 50px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
 .modal-icon.danger { background: rgba(255, 77, 77, 0.1); color: var(--red); } .modal-icon.warning { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
@@ -165,7 +156,6 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 .modal-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .btn-cancel { background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); border: 1px solid rgba(255, 255, 255, 0.1); }
 .btn-confirm { background: var(--red); color: #fff; } .btn-save { background: var(--gold); color: #000; }
-
 .hidden { display: none !important; }
 
 /* MOBILE BOTTOM NAV */
@@ -173,7 +163,6 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 10px; cursor: pointer; padding: 6px 12px; border-radius: 8px; transition: all 0.3s; }
 .nav-item i { font-size: 18px; }
 .nav-item.active { color: var(--gold); }
-
 .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 40; }
 
 /* RESPONSIVE DESIGN */
@@ -184,14 +173,11 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
   .main-content { margin-left: 0; padding: 16px; padding-bottom: 90px; }
   .mobile-bottom-nav { display: flex; }
   .menu-toggle-btn { display: flex !important; }
-  
   .stats-grid, .stats-grid-2 { grid-template-columns: 1fr; gap: 12px; }
   .content-row { grid-template-columns: 1fr; gap: 16px; }
   .stat-value { font-size: 28px; }
-  
   .page-header { margin-bottom: 20px; }
   .page-title h2 { font-size: 22px; }
-
   table, thead, tbody, th, td, tr { display: block; }
   thead { display: none; }
   tr { margin-bottom: 12px; border: 1px solid var(--border-gold); border-radius: 12px; background: var(--bg-card); padding: 8px 0; }
@@ -210,9 +196,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 <div id="loginPage" class="login-page">
   <div class="particles" id="particles"></div>
   <div class="login-card">
-    <!-- LOGO LOGIN (Ganti link gambar di bawah ini) -->
-    <img src="MASUKKAN_LINK_LOGO_ANDA_DISINI.png" alt="Logo Aplikasi" class="app-logo" onerror="this.style.display='none'">
-    
+    <img src="MASUKKAN_LINK_LOGO_ANDA_DISINI.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
     <h1 class="font-display text-3xl font-bold text-center mb-2" style="color: var(--gold);">Welcome Back!</h1>
     <p class="text-center text-sm mb-8 tracking-widest uppercase" style="color: var(--text-secondary);">Portal Dashboard Keuangan</p>
     <form id="loginForm" onsubmit="return false;">
@@ -235,7 +219,6 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <!-- LOGO SIDEBAR (Ganti link gambar di bawah ini) -->
         <img src="MASUKKAN_LINK_LOGO_ANDA_DISINI.png" alt="Logo" class="sidebar-logo-img" onerror="this.style.display='none'">
         <div class="sidebar-logo-text"><h1>KEUANGAN PRIBADI</h1><p>Personal Finance</p></div>
       </div>
@@ -260,20 +243,18 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
   <main class="main-content">
     <div class="page-header">
       <div class="page-title" style="display:flex;align-items:center;gap:12px;">
-        <button class="btn-icon menu-toggle-btn" style="display:none;background:var(--bg-card);border:1px solid var(--border-gold);color:var(--gold);position:relative;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <button class="btn-icon menu-toggle-btn" style="display:none;background:var(--bg-card);border:1px solid var(--border-gold);color:var(--gold);" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         <div><h2 id="pageTitle">Dashboard Keuangan</h2><p id="pageSubtitle">Pantau arus kas dan kelola transaksi keuangan Anda</p></div>
       </div>
       <div class="header-actions">
         <div class="date-badge"><i class="fas fa-calendar-alt" style="color:var(--gold);"></i><span id="currentDate"></span></div>
       </div>
     </div>
-    
     <section id="dashboardView" class="view-section active"></section>
     <section id="transaksiView" class="view-section"></section>
     <section id="assetsView" class="view-section"></section>
     <section id="categoryView" class="view-section"></section>
   </main>
-
   <nav class="mobile-bottom-nav">
     <div class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i><span>Home</span></div>
     <div class="nav-item" data-view="transaksi" onclick="switchView('transaksi')"><i class="fas fa-exchange-alt"></i><span>Riwayat</span></div>
@@ -315,7 +296,6 @@ function init() {
   createParticles(); setCurrentDate(); loadData();
   if (sessionStorage.getItem('isLoggedIn') === 'true') showDashboard();
 }
-
 function createParticles() { const c = document.getElementById('particles'); for(let i=0; i<30; i++) { const p = document.createElement('div'); p.className='particle'; p.style.left = Math.random()*100+'%'; p.style.width = p.style.height = (Math.random()*3+2)+'px'; p.style.animationDuration = (Math.random()*10+10)+'s'; c.appendChild(p); } }
 function setCurrentDate() { document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
 
@@ -332,10 +312,8 @@ function switchView(viewName) {
   document.getElementById(viewName + 'View').classList.add('active');
   document.querySelectorAll('.menu-item, .nav-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll(`[data-view="${viewName}"]`).forEach(el => el.classList.add('active'));
-  
   const titles = { dashboard: ['Dashboard Keuangan', 'Pantau arus kas dan kelola transaksi'], transaksi: ['Transaksi', 'Cari dan filter riwayat transaksi'], assets: ['Aset Pribadi', 'Kelola aset Anda'], category: ['Kategori & Total', 'Rekapitulasi keuangan'] };
   document.getElementById('pageTitle').textContent = titles[viewName][0]; document.getElementById('pageSubtitle').textContent = titles[viewName][1];
-  
   if (viewName === 'transaksi') applyFilters();
   if (viewName === 'category') renderCategoryView();
   document.getElementById('sidebar').classList.remove('open');
@@ -366,21 +344,11 @@ function renderDashboard() {
   const inc = transactions.filter(t => t.type === 'PEMASUKAN').reduce((s, t) => s + t.amount, 0);
   const exp = transactions.filter(t => t.type === 'PENGELUARAN').reduce((s, t) => s + t.amount, 0);
   const bal = inc - exp;
-  
   document.getElementById('dashboardView').innerHTML = `
     <div class="stats-grid">
-      <div class="stat-card stat-card-primary">
-        <div class="stat-icon" style="background: rgba(255, 215, 0, 0.1); color: var(--gold);"><i class="fas fa-wallet"></i></div>
-        <div class="stat-label">Total Saldo</div><div class="stat-value gold">${formatCurrency(bal)}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background: rgba(0, 214, 143, 0.1); color: var(--green);"><i class="fas fa-arrow-down"></i></div>
-        <div class="stat-label">Pemasukan</div><div class="stat-value positive">${formatCurrency(inc)}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background: rgba(255, 77, 77, 0.1); color: var(--red);"><i class="fas fa-arrow-up"></i></div>
-        <div class="stat-label">Pengeluaran</div><div class="stat-value negative">${formatCurrency(exp)}</div>
-      </div>
+      <div class="stat-card stat-card-primary"><div class="stat-icon" style="background: rgba(255, 215, 0, 0.1); color: var(--gold);"><i class="fas fa-wallet"></i></div><div class="stat-label">Total Saldo</div><div class="stat-value gold">${formatCurrency(bal)}</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background: rgba(0, 214, 143, 0.1); color: var(--green);"><i class="fas fa-arrow-down"></i></div><div class="stat-label">Pemasukan</div><div class="stat-value positive">${formatCurrency(inc)}</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background: rgba(255, 77, 77, 0.1); color: var(--red);"><i class="fas fa-arrow-up"></i></div><div class="stat-label">Pengeluaran</div><div class="stat-value negative">${formatCurrency(exp)}</div></div>
     </div>
     <div class="content-row">
       <div class="card">
@@ -388,9 +356,7 @@ function renderDashboard() {
         <form id="transactionForm" onsubmit="return false;">
           <div class="form-group"><label class="form-label">Keterangan</label><input type="text" class="form-input" id="description" placeholder="Contoh: Makan siang" required></div>
           <div class="form-group"><label class="form-label">Kategori</label>
-            <select class="form-select" id="category" required>
-              <option value="">Pilih kategori</option><option value="Operasional">Operasional</option><option value="Gaji">Gaji</option><option value="Makan">Makan</option><option value="Transport">Transport</option><option value="Belanja">Belanja</option><option value="Bonus">Bonus</option><option value="Lainnya">Lainnya</option>
-            </select>
+            <select class="form-select" id="category" required><option value="">Pilih kategori</option><option value="Operasional">Operasional</option><option value="Gaji">Gaji</option><option value="Makan">Makan</option><option value="Transport">Transport</option><option value="Belanja">Belanja</option><option value="Bonus">Bonus</option><option value="Lainnya">Lainnya</option></select>
           </div>
           <div class="form-group"><label class="form-label">Jumlah (Rp)</label><input type="number" class="form-input" id="amount" placeholder="0" min="1" required></div>
           <div class="form-buttons">
@@ -417,7 +383,6 @@ function renderDashboard() {
         <tbody>${transactions.slice(0, 5).map((t, i) => tableRowHTML(t, i)).join('') || emptyRow(7)}</tbody>
       </table></div>
     </div>`;
-    
   setTimeout(() => { renderChart(inc, exp); }, 100);
 }
 
@@ -480,14 +445,9 @@ function renderAssetsView() {
       <div class="card-header"><div class="card-title"><i class="fas fa-list-ul"></i> Daftar Aset</div></div>
       <div class="table-container"><table>
         <thead><tr><th>No</th><th>Nama Aset</th><th>Jenis</th><th>Nilai</th><th>Aksi</th></tr></thead>
-        <tbody>${assets.map((a, i) => `
-          <tr>
-            <td data-label="No">${i+1}</td><td data-label="Nama">${a.name}</td><td data-label="Jenis"><span class="badge badge-asset">${a.type}</span></td><td data-label="Nilai" class="amount-asset">${formatCurrency(a.value)}</td>
-            <td data-label="Aksi"><div class="action-btns"><button class="btn-icon btn-delete" onclick="requestDelete('asset', ${a.id})"><i class="fas fa-trash"></i></button></div></td>
-          </tr>`).join('') || emptyRow(5)}</tbody>
+        <tbody>${assets.map((a, i) => `<tr><td data-label="No">${i+1}</td><td data-label="Nama">${a.name}</td><td data-label="Jenis"><span class="badge badge-asset">${a.type}</span></td><td data-label="Nilai" class="amount-asset">${formatCurrency(a.value)}</td><td data-label="Aksi"><div class="action-btns"><button class="btn-icon btn-delete" onclick="requestDelete('asset', ${a.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('') || emptyRow(5)}</tbody>
       </table></div>
     </div>`;
-    
   setTimeout(() => { renderAssetChart(); }, 100);
 }
 
@@ -495,21 +455,15 @@ function renderCategoryView() {
   const grouped = {};
   transactions.forEach(t => { const k = `${t.category}__${t.type}`; if(!grouped[k]) grouped[k] = { name: t.category, type: t.type, count: 0, total: 0 }; grouped[k].count++; grouped[k].total += t.amount; });
   assets.forEach(a => { if(!grouped[a.type]) grouped[a.type] = { name: a.type, type: 'ASET', count: 0, total: 0 }; grouped[a.type].count++; grouped[a.type].total += a.value; });
-  
   const inc = transactions.filter(t => t.type === 'PEMASUKAN').reduce((s, t) => s + t.amount, 0);
   const exp = transactions.filter(t => t.type === 'PENGELUARAN').reduce((s, t) => s + t.amount, 0);
   const cash = inc - exp; const totalA = assets.reduce((s, a) => s + a.value, 0); const net = totalA + cash;
-
   document.getElementById('categoryView').innerHTML = `
     <div class="card">
       <div class="card-header"><div class="card-title"><i class="fas fa-layer-group"></i> Ringkasan Kategori</div></div>
       <div class="table-container"><table>
         <thead><tr><th>Kategori</th><th>Tipe</th><th>Item</th><th>Total Nilai</th></tr></thead>
-        <tbody>${Object.values(grouped).map(item => `
-          <tr>
-            <td data-label="Kategori" style="font-weight:500;">${item.name}</td><td data-label="Tipe"><span class="badge ${item.type === 'PEMASUKAN' ? 'badge-income' : item.type === 'PENGELUARAN' ? 'badge-expense' : 'badge-asset'}">${item.type}</span></td><td data-label="Jumlah Item">${item.count} item</td><td data-label="Total Nilai" class="amount-${item.type === 'PEMASUKAN' ? 'income' : item.type === 'PENGELUARAN' ? 'expense' : 'asset'}">${formatCurrency(item.total)}</td>
-          </tr>`).join('')}
-        </tbody>
+        <tbody>${Object.values(grouped).map(item => `<tr><td data-label="Kategori" style="font-weight:500;">${item.name}</td><td data-label="Tipe"><span class="badge ${item.type === 'PEMASUKAN' ? 'badge-income' : item.type === 'PENGELUARAN' ? 'badge-expense' : 'badge-asset'}">${item.type}</span></td><td data-label="Jumlah Item">${item.count} item</td><td data-label="Total Nilai" class="amount-${item.type === 'PEMASUKAN' ? 'income' : item.type === 'PENGELUARAN' ? 'expense' : 'asset'}">${formatCurrency(item.total)}</td></tr>`).join('')}</tbody>
         <tfoot>
           <tr><td colspan="3" class="tfoot-label">Total Pemasukan:</td><td class="amount-income">${formatCurrency(inc)}</td></tr>
           <tr><td colspan="3" class="tfoot-label">Total Pengeluaran:</td><td class="amount-expense">${formatCurrency(exp)}</td></tr>
@@ -601,29 +555,18 @@ function exportToCSV() {
   const a = document.createElement('a'); a.href = url; a.download = 'transaksi.csv'; a.click(); URL.revokeObjectURL(url); showToast('CSV diunduh!', 'success');
 }
 
-// CHARTS
 function renderChart(inc, exp) {
-    const canvas = document.getElementById('cashFlowChart');
-    if (!canvas) return;
+    const canvas = document.getElementById('cashFlowChart'); if (!canvas) return;
     if (typeof Chart === 'undefined') { if (canvas.parentElement) canvas.parentElement.innerHTML = '<div style="text-align:center;color:#888;font-size:12px;">Grafik tidak dapat dimuat.</div>'; return; }
-    const ctx = canvas.getContext('2d');
-    if (cashFlowChart) cashFlowChart.destroy();
-    cashFlowChart = new Chart(ctx, {
-        type: 'doughnut', data: { labels: ['Pemasukan', 'Pengeluaran'], datasets: [{ data: [inc, exp], backgroundColor: ['#00d68f', '#ff4d4d'], borderColor: '#0a0a0a', borderWidth: 2, hoverOffset: 8 }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
-    });
+    const ctx = canvas.getContext('2d'); if (cashFlowChart) cashFlowChart.destroy();
+    cashFlowChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Pemasukan', 'Pengeluaran'], datasets: [{ data: [inc, exp], backgroundColor: ['#00d68f', '#ff4d4d'], borderColor: '#0a0a0a', borderWidth: 2, hoverOffset: 8 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } } });
 }
 function renderAssetChart() {
-    const canvas = document.getElementById('assetChart');
-    if (!canvas) return;
+    const canvas = document.getElementById('assetChart'); if (!canvas) return;
     if (typeof Chart === 'undefined') { if (canvas.parentElement) canvas.parentElement.innerHTML = '<div style="text-align:center;color:#888;font-size:12px;">Grafik tidak dapat dimuat.</div>'; return; }
-    const ctx = canvas.getContext('2d');
-    if (assetChart) assetChart.destroy();
+    const ctx = canvas.getContext('2d'); if (assetChart) assetChart.destroy();
     const grouped = assets.reduce((acc, a) => { acc[a.type] = (acc[a.type] || 0) + a.value; return acc; }, {});
-    assetChart = new Chart(ctx, {
-        type: 'bar', data: { labels: Object.keys(grouped), datasets: [{ data: Object.values(grouped), backgroundColor: ['#FFD700', '#4d8dff', '#00d68f', '#DAA520', '#ff4d4d'], borderRadius: 6 }] },
-        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }, y: { grid: { display: false }, ticks: { color: '#fff' } } } }
-    });
+    assetChart = new Chart(ctx, { type: 'bar', data: { labels: Object.keys(grouped), datasets: [{ data: Object.values(grouped), backgroundColor: ['#FFD700', '#4d8dff', '#00d68f', '#DAA520', '#ff4d4d'], borderRadius: 6 }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }, y: { grid: { display: false }, ticks: { color: '#fff' } } } } });
 }
 
 function formatCurrency(amount) { const prefix = amount < 0 ? '−Rp ' : 'Rp '; return prefix + Math.abs(amount).toLocaleString('id-ID'); }
