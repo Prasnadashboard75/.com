@@ -88,7 +88,7 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 .view-section { display: none; animation: fadeIn 0.4s ease; }
 .view-section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
 .page-title h2 { font-size: 24px; font-weight: 800; font-family: 'Playfair Display', serif; color: #fff; }
 .page-title p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
@@ -118,9 +118,11 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 /* FORMS & FILTERS */
 .form-group { margin-bottom: 14px; }
 .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
-.form-input, .form-select { width: 100%; padding: 12px 14px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; transition: all 0.3s; }
+.form-input, .form-select { width: 100%; padding: 12px 14px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; color: #fff !important; font-size: 14px; font-family: inherit; transition: all 0.3s; }
+.form-input::placeholder { color: #666; }
 .form-input:focus, .form-select:focus { outline: none; border-color: var(--gold); background: rgba(212, 175, 55, 0.03); }
 .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23D4AF37' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.form-select option { background: #171717 !important; color: #fff !important; }
 .form-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
 .btn-action { padding: 12px; border: none; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s; }
 .btn-income { background: var(--green); color: #000; } .btn-expense { background: var(--red); color: #fff; } .btn-asset { background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark)); color: #000; }
@@ -175,7 +177,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; border-top: 2p
 .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 40; }
 
 /* RESPONSIVE DESIGN (MOBILE APP MODE) */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .sidebar { transform: translateX(-100%); z-index: 60; }
   .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
   .sidebar.open ~ .sidebar-backdrop { display: block; }
@@ -309,7 +311,7 @@ let transactions = []; let assets = []; let deleteTarget = {}; let editTargetId 
 const safeStorage = { getItem: k => { try { return localStorage.getItem(k); } catch(e) { return null; } }, setItem: (k,v) => { try { localStorage.setItem(k,v); } catch(e) {} } };
 
 function init() {
-  applyTheme(); // Terapkan tema tersimpan
+  applyTheme(); 
   createParticles(); setCurrentDate(); loadData();
   if (sessionStorage.getItem('isLoggedIn') === 'true') showDashboard();
 }
@@ -322,7 +324,6 @@ function toggleTheme() {
   body.setAttribute('data-theme', newTheme);
   safeStorage.setItem('theme', newTheme);
   document.getElementById('themeIcon').className = newTheme === 'luxury' ? 'fas fa-diamond' : 'fas fa-moon';
-  // Render ulang chart agar warnanya menyesuaikan
   if (!document.getElementById('dashboardPage').classList.contains('hidden')) {
     renderAll(); 
   }
@@ -421,7 +422,7 @@ function renderDashboard() {
         <div class="card-header"><div class="card-title"><i class="fas fa-chart-pie"></i> Arus Kas</div></div>
         <div style="position: relative; height: 240px; display: flex; align-items: center; justify-content: center;">
           <canvas id="cashFlowChart"></canvas>
-          <div style="position: absolute; text-align: center; pointer-events: none;">
+          <div style="position: absolute; text-align: center; pointer-events: none; z-index: 10;">
             <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Saldo</div>
             <div style="font-size: 22px; font-weight: 800; color: var(--gold);">${formatCurrency(bal)}</div>
           </div>
@@ -435,7 +436,11 @@ function renderDashboard() {
         <tbody>${transactions.slice(0, 5).map((t, i) => tableRowHTML(t, i)).join('') || emptyRow(7)}</tbody>
       </table></div>
     </div>`;
-  renderChart(inc, exp);
+    
+  // Delay chart rendering to ensure canvas is visible in DOM
+  setTimeout(() => {
+    renderChart(inc, exp);
+  }, 100);
 }
 
 function renderTransaksiView() {
@@ -504,7 +509,10 @@ function renderAssetsView() {
           </tr>`).join('') || emptyRow(5)}</tbody>
       </table></div>
     </div>`;
-  renderAssetChart();
+    
+  setTimeout(() => {
+    renderAssetChart();
+  }, 100);
 }
 
 function renderCategoryView() {
@@ -617,30 +625,80 @@ function exportToCSV() {
   const a = document.createElement('a'); a.href = url; a.download = 'transaksi.csv'; a.click(); URL.revokeObjectURL(url); showToast('CSV diunduh!', 'success');
 }
 
-// CHARTS
-function getChartColors() {
-  const style = getComputedStyle(document.body);
-  return {
-    gold: style.getPropertyValue('--gold').trim(),
-    text: style.getPropertyValue('--text-muted').trim()
-  };
-}
+// CHARTS - Bulletproof rendering
 function renderChart(inc, exp) {
-  if (cashFlowChart) cashFlowChart.destroy();
-  const colors = getChartColors();
-  cashFlowChart = new Chart(document.getElementById('cashFlowChart'), {
-    type: 'doughnut', data: { labels: ['Pemasukan', 'Pengeluaran'], datasets: [{ data: [inc, exp], backgroundColor: ['#00d68f', '#ff4d4d'], borderColor: colors.gold, borderWidth: 2, hoverOffset: 8 }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
-  });
+    const canvas = document.getElementById('cashFlowChart');
+    if (!canvas) return;
+    
+    if (typeof Chart === 'undefined') {
+        if (canvas.parentElement) {
+            canvas.parentElement.innerHTML = '<div style="text-align:center;color:#707070;font-size:12px;">Grafik tidak dapat dimuat.<br>Periksa koneksi internet.</div>';
+        }
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    if (cashFlowChart) cashFlowChart.destroy();
+    
+    cashFlowChart = new Chart(ctx, {
+        type: 'doughnut', 
+        data: { 
+            labels: ['Pemasukan', 'Pengeluaran'], 
+            datasets: [{ 
+                data: [inc, exp], 
+                backgroundColor: ['#00d68f', '#ff4d4d'], 
+                borderColor: '#171717', 
+                borderWidth: 2, 
+                hoverOffset: 8 
+            }] 
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            cutout: '70%', 
+            plugins: { 
+                legend: { display: false } 
+            } 
+        }
+    });
 }
+
 function renderAssetChart() {
-  if (assetChart) assetChart.destroy();
-  const colors = getChartColors();
-  const grouped = assets.reduce((acc, a) => { acc[a.type] = (acc[a.type] || 0) + a.value; return acc; }, {});
-  assetChart = new Chart(document.getElementById('assetChart'), {
-    type: 'bar', data: { labels: Object.keys(grouped), datasets: [{ data: Object.values(grouped), backgroundColor: colors.gold, borderRadius: 6 }] },
-    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: colors.text } }, y: { grid: { display: false }, ticks: { color: '#b0b0b0' } } } }
-  });
+    const canvas = document.getElementById('assetChart');
+    if (!canvas) return;
+    
+    if (typeof Chart === 'undefined') {
+        if (canvas.parentElement) {
+            canvas.parentElement.innerHTML = '<div style="text-align:center;color:#707070;font-size:12px;">Grafik tidak dapat dimuat.<br>Periksa koneksi internet.</div>';
+        }
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    if (assetChart) assetChart.destroy();
+    
+    const grouped = assets.reduce((acc, a) => { acc[a.type] = (acc[a.type] || 0) + a.value; return acc; }, {});
+    assetChart = new Chart(ctx, {
+        type: 'bar', 
+        data: { 
+            labels: Object.keys(grouped), 
+            datasets: [{ 
+                data: Object.values(grouped), 
+                backgroundColor: ['#D4AF37', '#4d8dff', '#00d68f', '#C5A028', '#ff4d4d'], 
+                borderRadius: 6 
+            }] 
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            indexAxis: 'y', 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#707070' } }, 
+                y: { grid: { display: false }, ticks: { color: '#b0b0b0' } } 
+            } 
+        }
+    });
 }
 
 function formatCurrency(amount) { const prefix = amount < 0 ? '−Rp ' : 'Rp '; return prefix + Math.abs(amount).toLocaleString('id-ID'); }
