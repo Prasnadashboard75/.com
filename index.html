@@ -34,20 +34,18 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 /* LOGIN PAGE - BACKGROUND ASLI TANPA OVERLAY */
 .login-page { 
   position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-  /* GANTI TULISAN DI BAWAH INI DENGAN LINK GAMBAR ANDA */
-  background-image: url('https://lh3.googleusercontent.com/d/1hZmjAuONeBc5fS_g_9v8K4no6hiNZ7y3g');
+  background-image: url('https://lh3.googleusercontent.com/d/1hZmjAuONeBc5fS_g_9v8K4no6hiNZ7y3');
   background-size: cover; 
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Membuat background statis seperti di PC */
+  background-attachment: fixed; 
   z-index: 100; padding: 20px; 
 }
-.login-page::before { display: none; } /* TIDAK ADA OVERLAY GELAP LAGI */
+.login-page::before { display: none; } 
 .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .particle { position: absolute; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255, 215, 0, 0.5); animation: floatUp linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 1; transform: translateY(90vh) scale(1); } 90% { opacity: 1; } 100% { transform: translateY(-10vh) scale(0); opacity: 0; } }
 
-/* KOTAK LOGIN DIBUAT GELAP AGAR TETAP TERBACA */
 .login-card { position: relative; z-index: 10; width: 100%; max-width: 400px; padding: 40px 30px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border-gold); border-radius: 20px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes cardAppear { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
@@ -164,15 +162,13 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
-  /* Penyesuaian Background di Mobile agar Full */
   .login-page {
-    background-attachment: scroll; /* iOS sering error jika fixed, jadi scroll tapi tetap cover */
+    background-attachment: scroll; 
     background-size: cover;
     background-position: center center;
-    height: 100vh; /* Memaksa tinggi penuh 100% layar HP */
-    width: 100vw; /* Memaksa lebar penuh 100% layar HP */
+    height: 100vh; 
+    width: 100vw; 
   }
-  
   .sidebar { transform: translateX(-100%); z-index: 60; }
   .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
   .sidebar.open ~ .sidebar-backdrop { display: block; }
@@ -202,7 +198,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 <div id="loginPage" class="login-page">
   <div class="particles" id="particles"></div>
   <div class="login-card">
-    <img src="MASUKKAN_LINK_LOGO_ANDA_DISINI.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
+    <img src="https://ibb.co/wZBGW9G1" alt="Logo" class="app-logo" onerror="this.style.display='none'">
     <h1 class="font-display text-3xl font-bold text-center mb-2" style="color: var(--gold);">Welcome Back!</h1>
     <p class="text-center text-sm mb-8 tracking-widest uppercase" style="color: var(--text-secondary);">Portal Dashboard Keuangan</p>
     <form id="loginForm" onsubmit="return false;">
@@ -225,7 +221,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <img src="MASUKKAN_LINK_LOGO_ANDA_DISINI.png" alt="Logo" class="sidebar-logo-img" onerror="this.style.display='none'">
+        <img src="https://ibb.co/wZBGW9G1" alt="Logo" class="sidebar-logo-img" onerror="this.style.display='none'">
         <div class="sidebar-logo-text"><h1>KEUANGAN PRIBADI</h1><p>Personal Finance</p></div>
       </div>
     </div>
@@ -238,8 +234,8 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
     </nav>
     <div class="sidebar-footer">
       <div class="user-card">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;">A</div>
-        <div style="flex:1;"><p style="font-size:13px;font-weight:600;color:var(--gold);">prasna</p><span style="font-size:11px;color:var(--text-secondary);">Administrator</span></div>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;">P</div>
+        <div style="flex:1;"><p style="font-size:13px;font-weight:600;color:var(--gold);">Prasna</p><span style="font-size:11px;color:var(--text-secondary);">Administrator</span></div>
         <button onclick="logout()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:16px;"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
