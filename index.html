@@ -6,7 +6,6 @@
 <title>Portal Dashboard Keuangan</title>
 
 <!-- ===== SCRIPT LOGO APLIKASI (APP ICON) ===== -->
-<!-- Ganti link di bawah ini dengan link gambar logo Anda (ukuran 192x192 atau 512x512 px) -->
 <link rel="apple-touch-icon" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
 <link rel="icon" type="image/png" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
 <link rel="shortcut icon" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
@@ -17,20 +16,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root {
-  --bg-dark: #000000; 
-  --bg-card: #0a0a0a; 
-  --bg-elevated: #111111;
-  --gold: #FFD700; 
-  --gold-soft: #DAA520; 
-  --gold-bright: #FFE55C; 
-  --gold-dark: #B8860B;
+  --bg-dark: #000000; --bg-card: #0a0a0a; --bg-elevated: #111111;
+  --gold: #FFD700; --gold-soft: #DAA520; --gold-bright: #FFE55C; --gold-dark: #B8860B;
   --border-gold: rgba(255, 215, 0, 0.25);
-  --text-primary: #FFD700; 
-  --text-secondary: #ffffff; 
-  --text-muted: #888888;
-  --green: #00d68f; 
-  --red: #ff4d4d; 
-  --blue: #4d8dff;
+  --text-primary: #FFD700; --text-secondary: #ffffff; --text-muted: #888888;
+  --green: #00d68f; --red: #ff4d4d; --blue: #4d8dff;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; }
@@ -41,19 +31,24 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 .app-logo:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
 .sidebar-logo-img { width: 45px; height: 45px; object-fit: cover; border-radius: 12px; border: 1px solid var(--gold); box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2); background-color: #000; }
 
-/* LOGIN PAGE - BACKGROUND ASLI TANPA OVERLAY GELAP */
+/* LOGIN PAGE - BACKGROUND ASLI TANPA OVERLAY */
 .login-page { 
   position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-  background-image: url('https://lh3.googleusercontent.com/d/1hZmjAuONeBc5fS_g_9v8K4no6hiNZ7y3'); /* HANYA GAMBAR ASLI */
-  background-size: cover; background-position: center; z-index: 100; padding: 20px; 
+  /* GANTI TULISAN DI BAWAH INI DENGAN LINK GAMBAR ANDA */
+  background-image: url('https://lh3.googleusercontent.com/d/1hZmjAuONeBc5fS_g_9v8K4no6hiNZ7y3g');
+  background-size: cover; 
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Membuat background statis seperti di PC */
+  z-index: 100; padding: 20px; 
 }
-.login-page::before { display: none; } /* Overlay tema sebelumnya dihilangkan */
+.login-page::before { display: none; } /* TIDAK ADA OVERLAY GELAP LAGI */
 .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .particle { position: absolute; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255, 215, 0, 0.5); animation: floatUp linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 1; transform: translateY(90vh) scale(1); } 90% { opacity: 1; } 100% { transform: translateY(-10vh) scale(0); opacity: 0; } }
 
-/* KARTU LOGIN DIBUAT AGAK GELAP & BLUR AGAR TEKS TETAP KELIHATAN DI ATAS GAMBAR */
-.login-card { position: relative; z-index: 10; width: 100%; max-width: 400px; padding: 40px 30px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(15px); border: 1px solid var(--border-gold); border-radius: 20px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+/* KOTAK LOGIN DIBUAT GELAP AGAR TETAP TERBACA */
+.login-card { position: relative; z-index: 10; width: 100%; max-width: 400px; padding: 40px 30px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border-gold); border-radius: 20px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes cardAppear { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 .input-group { position: relative; margin-bottom: 18px; }
@@ -169,6 +164,15 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
+  /* Penyesuaian Background di Mobile agar Full */
+  .login-page {
+    background-attachment: scroll; /* iOS sering error jika fixed, jadi scroll tapi tetap cover */
+    background-size: cover;
+    background-position: center center;
+    height: 100vh; /* Memaksa tinggi penuh 100% layar HP */
+    width: 100vw; /* Memaksa lebar penuh 100% layar HP */
+  }
+  
   .sidebar { transform: translateX(-100%); z-index: 60; }
   .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
   .sidebar.open ~ .sidebar-backdrop { display: block; }
