@@ -6,9 +6,9 @@
 <title>Portal Dashboard Keuangan</title>
 
 <!-- ===== SCRIPT LOGO APLIKASI (APP ICON) ===== -->
-<link rel="apple-touch-icon" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
-<link rel="icon" type="image/png" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
-<link rel="shortcut icon" href="MASUKKAN_LINK_LOGO_ANDA_DISINI.png">
+<link rel="apple-touch-icon" href="https://ibb.co/wZBGW9G1">
+<link rel="icon" type="image/png" href="https://ibb.co/wZBGW9G1">
+<link rel="shortcut icon" href="https://ibb.co/wZBGW9G1">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -216,7 +216,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
       </div>
       <button type="button" class="btn-login" onclick="handleLogin()">Masuk</button>
     </form>
-    <div class="login-hint">Demo Access — User ID: <code>admin</code> / Password: <code>admin123</code></div>
+    <div class="login-hint">Demo Access — User ID: <code>prasna</code> / Password: <code>1</code></div>
   </div>
 </div>
 
@@ -239,7 +239,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
     <div class="sidebar-footer">
       <div class="user-card">
         <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;">A</div>
-        <div style="flex:1;"><p style="font-size:13px;font-weight:600;color:var(--gold);">Admin</p><span style="font-size:11px;color:var(--text-secondary);">Administrator</span></div>
+        <div style="flex:1;"><p style="font-size:13px;font-weight:600;color:var(--gold);">prasna</p><span style="font-size:11px;color:var(--text-secondary);">Administrator</span></div>
         <button onclick="logout()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:16px;"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
@@ -306,7 +306,7 @@ function createParticles() { const c = document.getElementById('particles'); for
 function setCurrentDate() { document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
 
 function handleLogin() {
-  if (document.getElementById('userId').value.trim() === 'admin' && document.getElementById('password').value.trim() === 'admin123') {
+  if (document.getElementById('userId').value.trim() === 'prasna' && document.getElementById('password').value.trim() === '1') {
     sessionStorage.setItem('isLoggedIn','true'); showToast('Berhasil masuk!', 'success'); setTimeout(showDashboard, 500);
   } else { showToast('User ID atau password salah!', 'error'); document.querySelector('.login-card').style.animation = 'shake 0.5s'; setTimeout(() => document.querySelector('.login-card').style.animation = '', 500); }
 }
