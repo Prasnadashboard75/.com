@@ -230,6 +230,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
       <div class="menu-item active" data-view="dashboard" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i><span>Dashboard</span></div>
       <div class="menu-item" data-view="transaksi" onclick="switchView('transaksi')"><i class="fas fa-exchange-alt"></i><span>Transaksi</span></div>
       <div class="menu-item" data-view="assets" onclick="switchView('assets')"><i class="fas fa-gem"></i><span>Aset Pribadi</span></div>
+      <div class="menu-item" data-view="hutangpiutang" onclick="switchView('hutangpiutang')"><i class="fas fa-hand-holding-usd"></i><span>Hutang & Piutang</span></div>
       <div class="menu-item" data-view="category" onclick="switchView('category')"><i class="fas fa-tags"></i><span>Kategori & Total</span></div>
     </nav>
     <div class="sidebar-footer">
@@ -255,12 +256,14 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
     <section id="dashboardView" class="view-section active"></section>
     <section id="transaksiView" class="view-section"></section>
     <section id="assetsView" class="view-section"></section>
+    <section id="hutangpiutangView" class="view-section"></section>
     <section id="categoryView" class="view-section"></section>
   </main>
   <nav class="mobile-bottom-nav">
     <div class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')"><i class="fas fa-th-large"></i><span>Home</span></div>
     <div class="nav-item" data-view="transaksi" onclick="switchView('transaksi')"><i class="fas fa-exchange-alt"></i><span>Riwayat</span></div>
     <div class="nav-item" data-view="assets" onclick="switchView('assets')"><i class="fas fa-gem"></i><span>Aset</span></div>
+    <div class="nav-item" data-view="hutangpiutang" onclick="switchView('hutangpiutang')"><i class="fas fa-handshake"></i><span>Hutang</span></div>
     <div class="nav-item" data-view="category" onclick="switchView('category')"><i class="fas fa-tags"></i><span>Total</span></div>
   </nav>
 </div>
@@ -282,7 +285,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
     <h3>Edit Transaksi</h3>
     <div class="form-group" style="text-align: left;"><label class="form-label">Keterangan</label><input type="text" class="form-input" id="editDescription"></div>
     <div class="form-group" style="text-align: left;"><label class="form-label">Kategori</label>
-      <select class="form-select" id="editCategory"><option value="Operasional">Operasional</option><option value="Gaji">Gaji</option><option value="Makan">Makan</option><option value="Transport">Transport</option><option value="Belanja">Belanja</option><option value="Bonus">Bonus</option><option value="Lainnya">Lainnya</option></select>
+      <select class="form-select" id="editCategory"><option value="Operasional">Operasional</option><option value="Gaji">Gaji</option><option value="Makan">Makan</option><option value="Transport">Transport</option><option value="Belanja">Belanja</option><option value="Bonus">Bonus</option><option value="Hutang">Hutang</option><option value="Piutang">Piutang</option><option value="Lainnya">Lainnya</option></select>
     </div>
     <div class="form-group" style="text-align: left;"><label class="form-label">Jumlah (Rp)</label><input type="number" class="form-input" id="editAmount" min="1"></div>
     <div class="form-group" style="text-align: left;"><label class="form-label">Tanggal</label><input type="date" class="form-input" id="editDate"></div>
@@ -291,7 +294,7 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
 </div>
 
 <script>
-let transactions = []; let assets = []; let deleteTarget = {}; let editTargetId = null; let cashFlowChart = null; let assetChart = null;
+let transactions = []; let assets = []; let debts = []; let deleteTarget = {}; let editTargetId = null; let cashFlowChart = null; let assetChart = null;
 const safeStorage = { getItem: k => { try { return localStorage.getItem(k); } catch(e) { return null; } }, setItem: (k,v) => { try { localStorage.setItem(k,v); } catch(e) {} } };
 
 function init() {
@@ -314,10 +317,17 @@ function switchView(viewName) {
   document.getElementById(viewName + 'View').classList.add('active');
   document.querySelectorAll('.menu-item, .nav-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll(`[data-view="${viewName}"]`).forEach(el => el.classList.add('active'));
-  const titles = { dashboard: ['Dashboard Keuangan', 'Pantau arus kas dan kelola transaksi'], transaksi: ['Transaksi', 'Cari dan filter riwayat transaksi'], assets: ['Aset Pribadi', 'Kelola aset Anda'], category: ['Kategori & Total', 'Rekapitulasi keuangan'] };
+  const titles = { 
+      dashboard: ['Dashboard Keuangan', 'Pantau arus kas dan kelola transaksi'], 
+      transaksi: ['Transaksi', 'Cari dan filter riwayat transaksi'], 
+      assets: ['Aset Pribadi', 'Kelola aset Anda'], 
+      hutangpiutang: ['Hutang & Piutang', 'Catat pinjaman dan pemulangan dana'],
+      category: ['Kategori & Total', 'Rekapitulasi keuangan'] 
+  };
   document.getElementById('pageTitle').textContent = titles[viewName][0]; document.getElementById('pageSubtitle').textContent = titles[viewName][1];
   if (viewName === 'transaksi') applyFilters();
   if (viewName === 'category') renderCategoryView();
+  if (viewName === 'hutangpiutang') renderHutangPiutangView();
   document.getElementById('sidebar').classList.remove('open');
 }
 
@@ -330,17 +340,23 @@ function loadData() {
     { id: 4, description: 'Bonus Proyek', category: 'Bonus', type: 'PEMASUKAN', amount: 1500000, date: new Date().toISOString() },
     { id: 5, description: 'Belanja Bulanan', category: 'Belanja', type: 'PENGELUARAN', amount: 750000, date: new Date().toISOString() }
   ]; if(!t) saveTransactions();
+  
   let a = safeStorage.getItem('assets');
   assets = a ? JSON.parse(a) : [
     { id: 1, name: 'Tabungan BCA', type: 'Kas & Bank', value: 15000000 },
     { id: 2, name: 'Emas Antam 10gr', type: 'Barang Berharga', value: 10000000 },
     { id: 3, name: 'Reksadana PU', type: 'Investasi', value: 5000000 }
   ]; if(!a) saveAssets();
+
+  let d = safeStorage.getItem('debts');
+  debts = d ? JSON.parse(d) : [];
+  if(!d) saveDebts();
 }
 function saveTransactions() { safeStorage.setItem('transactions', JSON.stringify(transactions)); }
 function saveAssets() { safeStorage.setItem('assets', JSON.stringify(assets)); }
+function saveDebts() { safeStorage.setItem('debts', JSON.stringify(debts)); }
 
-function renderAll() { renderDashboard(); renderTransaksiView(); renderAssetsView(); renderCategoryView(); }
+function renderAll() { renderDashboard(); renderTransaksiView(); renderAssetsView(); renderHutangPiutangView(); renderCategoryView(); }
 
 function renderDashboard() {
   const inc = transactions.filter(t => t.type === 'PEMASUKAN').reduce((s, t) => s + t.amount, 0);
@@ -358,7 +374,7 @@ function renderDashboard() {
         <form id="transactionForm" onsubmit="return false;">
           <div class="form-group"><label class="form-label">Keterangan</label><input type="text" class="form-input" id="description" placeholder="Contoh: Makan siang" required></div>
           <div class="form-group"><label class="form-label">Kategori</label>
-            <select class="form-select" id="category" required><option value="">Pilih kategori</option><option value="Operasional">Operasional</option><option value="Gaji">Gaji</option><option value="Makan">Makan</option><option value="Transport">Transport</option><option value="Belanja">Belanja</option><option value="Bonus">Bonus</option><option value="Lainnya">Lainnya</option></select>
+            <select class="form-select" id="category" required><option value="">Pilih kategori</option><option value="Operasional">Operasional</option><option value="Gaji">Gaji</option><option value="Makan">Makan</option><option value="Transport">Transport</option><option value="Belanja">Belanja</option><option value="Bonus">Bonus</option><option value="Hutang">Hutang</option><option value="Piutang">Piutang</option><option value="Lainnya">Lainnya</option></select>
           </div>
           <div class="form-group"><label class="form-label">Jumlah (Rp)</label><input type="number" class="form-input" id="amount" placeholder="0" min="1" required></div>
           <div class="form-buttons">
@@ -453,6 +469,56 @@ function renderAssetsView() {
   setTimeout(() => { renderAssetChart(); }, 100);
 }
 
+function renderHutangPiutangView() {
+  const totalHutang = debts.filter(d => d.type === 'HUTANG').reduce((s, d) => s + (d.amount - d.paidAmount), 0);
+  const totalPiutang = debts.filter(d => d.type === 'PIUTANG').reduce((s, d) => s + (d.amount - d.paidAmount), 0);
+  
+  document.getElementById('hutangpiutangView').innerHTML = `
+    <div class="stats-grid-2">
+      <div class="stat-card stat-card-primary"><div class="stat-icon" style="background: rgba(255, 77, 77, 0.1); color: var(--red);"><i class="fas fa-money-bill-transfer"></i></div><div class="stat-label">Sisa Hutang (Saya Berhutang)</div><div class="stat-value negative">${formatCurrency(totalHutang)}</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background: rgba(0, 214, 143, 0.1); color: var(--green);"><i class="fas fa-hand-holding-dollar"></i></div><div class="stat-label">Sisa Piutang (Saya Memberi)</div><div class="stat-value positive">${formatCurrency(totalPiutang)}</div></div>
+    </div>
+    <div class="content-row">
+      <div class="card">
+        <div class="card-header"><div class="card-title"><i class="fas fa-plus-circle"></i> Catat Pinjaman</div></div>
+        <form id="debtForm" onsubmit="return false;">
+          <div class="form-group"><label class="form-label">Nama Pihak</label><input type="text" class="form-input" id="debtParty" placeholder="Contoh: Budi / Bank ABC" required></div>
+          <div class="form-group"><label class="form-label">Jumlah (Rp)</label><input type="number" class="form-input" id="debtAmount" placeholder="0" min="1" required></div>
+          <div class="form-group"><label class="form-label">Keterangan (Opsional)</label><input type="text" class="form-input" id="debtDesc" placeholder="Untuk apa"></div>
+          <div class="form-buttons">
+            <button type="button" class="btn-action btn-expense" onclick="addDebt('PIUTANG')"><i class="fas fa-arrow-up"></i> Saya Memberi</button>
+            <button type="button" class="btn-action btn-income" onclick="addDebt('HUTANG')"><i class="fas fa-arrow-down"></i> Saya Berhutang</button>
+          </div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title"><i class="fas fa-list-ul"></i> Daftar Hutang & Piutang</div></div>
+        <div class="table-container"><table>
+          <thead><tr><th>Pihak</th><th>Tipe</th><th>Total</th><th>Sisa</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody>
+            ${debts.map(d => {
+              const sisa = d.amount - d.paidAmount;
+              const isLunas = sisa <= 0;
+              return `<tr>
+                <td data-label="Pihak" style="font-weight:500;">${d.party}<br><span style="font-size:11px;color:var(--text-muted);">${d.desc || ''}</span></td>
+                <td data-label="Tipe"><span class="badge ${d.type === 'HUTANG' ? 'badge-expense' : 'badge-income'}">${d.type}</span></td>
+                <td data-label="Total" class="amount-asset">${formatCurrency(d.amount)}</td>
+                <td data-label="Sisa" class="amount-${d.type === 'HUTANG' ? 'expense' : 'income'}">${formatCurrency(sisa)}</td>
+                <td data-label="Status"><span class="badge ${isLunas ? 'badge-asset' : (d.type === 'HUTANG' ? 'badge-expense' : 'badge-income')}">${isLunas ? 'LUNAS' : 'BELUM LUNAS'}</span></td>
+                <td data-label="Aksi">
+                  <div class="action-btns">
+                    ${!isLunas ? `<button class="btn-icon btn-edit" onclick="repayDebt(${d.id})" title="Bayar / Terima"><i class="fas fa-money-bill-wave"></i></button>` : ''}
+                    <button class="btn-icon btn-delete" onclick="requestDelete('debt', ${d.id})"><i class="fas fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>`;
+            }).join('') || emptyRow(6)}
+          </tbody>
+        </table></div>
+      </div>
+    </div>`;
+}
+
 function renderCategoryView() {
   const grouped = {};
   transactions.forEach(t => { const k = `${t.category}__${t.type}`; if(!grouped[k]) grouped[k] = { name: t.category, type: t.type, count: 0, total: 0 }; grouped[k].count++; grouped[k].total += t.amount; });
@@ -460,6 +526,11 @@ function renderCategoryView() {
   const inc = transactions.filter(t => t.type === 'PEMASUKAN').reduce((s, t) => s + t.amount, 0);
   const exp = transactions.filter(t => t.type === 'PENGELUARAN').reduce((s, t) => s + t.amount, 0);
   const cash = inc - exp; const totalA = assets.reduce((s, a) => s + a.value, 0); const net = totalA + cash;
+  
+  const totalHutang = debts.filter(d => d.type === 'HUTANG').reduce((s, d) => s + (d.amount - d.paidAmount), 0);
+  const totalPiutang = debts.filter(d => d.type === 'PIUTANG').reduce((s, d) => s + (d.amount - d.paidAmount), 0);
+  const netWorth = net - totalHutang + totalPiutang;
+
   document.getElementById('categoryView').innerHTML = `
     <div class="card">
       <div class="card-header"><div class="card-title"><i class="fas fa-layer-group"></i> Ringkasan Kategori</div></div>
@@ -471,7 +542,9 @@ function renderCategoryView() {
           <tr><td colspan="3" class="tfoot-label">Total Pengeluaran:</td><td class="amount-expense">${formatCurrency(exp)}</td></tr>
           <tr><td colspan="3" class="tfoot-label">Saldo Kas:</td><td style="color: ${cash >= 0 ? 'var(--green)' : 'var(--red)'};">${formatCurrency(cash)}</td></tr>
           <tr><td colspan="3" class="tfoot-label">Total Aset:</td><td class="amount-asset">${formatCurrency(totalA)}</td></tr>
-          <tr style="border-top: 2px solid var(--gold);"><td colspan="3" class="tfoot-label" style="color: var(--gold); font-size: 16px;">Kekayaan Bersih:</td><td style="color: var(--gold); font-size: 16px; font-weight: 800;">${formatCurrency(net)}</td></tr>
+          <tr><td colspan="3" class="tfoot-label">Sisa Hutang:</td><td class="amount-expense">${formatCurrency(totalHutang)}</td></tr>
+          <tr><td colspan="3" class="tfoot-label">Sisa Piutang:</td><td class="amount-income">${formatCurrency(totalPiutang)}</td></tr>
+          <tr style="border-top: 2px solid var(--gold);"><td colspan="3" class="tfoot-label" style="color: var(--gold); font-size: 16px;">Kekayaan Bersih (Net Worth):</td><td style="color: var(--gold); font-size: 16px; font-weight: 800;">${formatCurrency(netWorth)}</td></tr>
         </tfoot>
       </table></div>
     </div>`;
@@ -500,8 +573,63 @@ function addAsset() {
   const n = document.getElementById('assetName').value.trim(); const t = document.getElementById('assetType').value; const v = parseInt(document.getElementById('assetValue').value);
   if (!n || !t || !v || v <= 0) return showToast('Lengkapi field aset!', 'error');
   assets.unshift({ id: Date.now(), name: n, type: t, value: v });
-  saveAssets(); renderAssetsView(); showToast('Aset ditambahkan!', 'success');
+  saveAssets(); renderAssetsView(); renderCategoryView(); showToast('Aset ditambahkan!', 'success');
 }
+
+function addDebt(type) {
+  const party = document.getElementById('debtParty').value.trim();
+  const amount = parseInt(document.getElementById('debtAmount').value);
+  const desc = document.getElementById('debtDesc').value.trim();
+  if (!party || !amount || amount <= 0) return showToast('Lengkapi Nama Pihak & Jumlah!', 'error');
+
+  debts.unshift({ id: Date.now(), party, amount, paidAmount: 0, type, desc, date: new Date().toISOString() });
+  saveDebts();
+
+  // Auto-create transaction
+  const transType = type === 'HUTANG' ? 'PEMASUKAN' : 'PENGELUARAN';
+  const transDesc = type === 'HUTANG' ? `Berhutang dari ${party}` : `Memberi pinjaman ke ${party}`;
+  transactions.unshift({
+    id: Date.now() + 1, // ensure unique
+    description: transDesc,
+    category: type === 'HUTANG' ? 'Hutang' : 'Piutang',
+    type: transType,
+    amount: amount,
+    date: new Date().toISOString()
+  });
+  saveTransactions();
+  renderAll();
+  showToast('Pinjaman dicatat & transaksi diperbarui!', 'success');
+}
+
+function repayDebt(id) {
+  const debt = debts.find(d => d.id === id);
+  if(!debt) return;
+  const sisa = debt.amount - debt.paidAmount;
+  const input = prompt(`Masukkan jumlah pembayaran/penerimaan:\n(Sisa: Rp ${sisa.toLocaleString('id-ID')})`);
+  if(!input) return;
+  const pay = parseInt(input);
+  if(!pay || pay <= 0) return showToast('Jumlah tidak valid!', 'error');
+  if(pay > sisa) return showToast('Jumlah melebihi sisa pinjaman!', 'error');
+
+  debt.paidAmount += pay;
+  saveDebts();
+
+  // Auto-create transaction for repayment
+  const transType = debt.type === 'HUTANG' ? 'PENGELUARAN' : 'PEMASUKAN';
+  const transDesc = debt.type === 'HUTANG' ? `Bayar hutang ke ${debt.party}` : `Terima piutang dari ${debt.party}`;
+  transactions.unshift({
+    id: Date.now(),
+    description: transDesc,
+    category: debt.type === 'HUTANG' ? 'Hutang' : 'Piutang',
+    type: transType,
+    amount: pay,
+    date: new Date().toISOString()
+  });
+  saveTransactions();
+  renderAll();
+  showToast('Pembayaran/penerimaan dicatat!', 'success');
+}
+
 function openEditModal(id) {
   const t = transactions.find(t => t.id === id); if(!t) return; editTargetId = id;
   document.getElementById('editDescription').value = t.description; document.getElementById('editCategory').value = t.category;
@@ -517,7 +645,8 @@ function saveEdit() {
 function requestDelete(type, id) { deleteTarget = { type, id }; document.getElementById('deleteModal').classList.remove('hidden'); }
 function confirmDelete() {
   if (deleteTarget.type === 'transaction') { transactions = transactions.filter(t => t.id !== deleteTarget.id); saveTransactions(); renderAll(); }
-  else { assets = assets.filter(a => a.id !== deleteTarget.id); saveAssets(); renderAssetsView(); }
+  else if (deleteTarget.type === 'asset') { assets = assets.filter(a => a.id !== deleteTarget.id); saveAssets(); renderAssetsView(); renderCategoryView(); }
+  else if (deleteTarget.type === 'debt') { debts = debts.filter(d => d.id !== deleteTarget.id); saveDebts(); renderHutangPiutangView(); renderCategoryView(); }
   closeModal('deleteModal'); showToast('Data dihapus!', 'success');
 }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
