@@ -90,7 +90,7 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 .view-section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* HEADER DENGAN WALLPAPER (BAGIAN MERAH) */
+/* HEADER DENGAN WALLPAPER BARU */
 .page-header { 
   display: flex; 
   justify-content: space-between; 
@@ -98,15 +98,15 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
   margin-bottom: 24px; 
   flex-wrap: wrap; 
   gap: 16px;
-  /* Overlay dikurangi dari 0.7 menjadi 0.3 agar gambar lebih keluar */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://i.ibb.co/GfngNgG5/logo.png');
-  background-color: #111; /* Warna dasar gelap */
-  background-size: 80px 80px; /* Gambar diperkecil */
+  /* Menggunakan gambar wallpaper dengan transparansi 30% */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://lh3.googleusercontent.com/d/1hZmjAuONeBc5fS_g_9v8K4no6hiNZ7y3');
+  background-color: #111; 
+  background-size: cover; /* Gambar full menutupi area */
   background-repeat: no-repeat;
-  background-position: right center; /* Logo diletakkan di kanan */
+  background-position: center;
   border: 1px solid var(--border-gold);
   border-radius: 12px;
-  padding: 16px 24px; /* Padding diperkecil agar box lebih ramping */
+  padding: 16px 24px; 
 }
 .page-title h2 { font-size: 24px; font-weight: 800; font-family: 'Playfair Display', serif; color: var(--gold); }
 .page-title p { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
