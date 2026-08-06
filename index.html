@@ -78,27 +78,37 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
 .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border-gold); }
 .user-card { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; background: rgba(255, 215, 0, 0.03); }
 
-/* BACKGROUND DASHBOARD UTAMA */
+/* BACKGROUND DASHBOARD UTAMA (Dikosongkan kembali) */
 .main-content { 
   flex: 1; 
   margin-left: 260px; 
   padding: 24px; 
   min-height: 100vh; 
   padding-bottom: 80px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.88)), url('https://i.ibb.co/GfngNgG5/logo.png');
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 .view-section { display: none; animation: fadeIn 0.4s ease; }
 .view-section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+
+/* HEADER DENGAN WALLPAPER (BAGIAN MERAH) */
+.page-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 24px; 
+  flex-wrap: wrap; 
+  gap: 16px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://i.ibb.co/GfngNgG5/logo.png');
+  background-size: cover; 
+  background-position: center; 
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: 24px;
+}
 .page-title h2 { font-size: 24px; font-weight: 800; font-family: 'Playfair Display', serif; color: var(--gold); }
 .page-title p { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 .header-actions { display: flex; align-items: center; gap: 12px; }
-.date-badge { padding: 8px 14px; background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: 10px; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+.date-badge { padding: 8px 14px; background: rgba(0, 0, 0, 0.6); border: 1px solid var(--border-gold); border-radius: 10px; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
 
 /* CARDS & STATS */
 .stats-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
@@ -187,9 +197,6 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
     width: 100%; 
     height: 100%;
   }
-  .main-content {
-    background-attachment: scroll; /* Kembali ke scroll agar tidak zoom di HP */
-  }
   .sidebar { transform: translateX(-100%); z-index: 60; }
   .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
   .sidebar.open ~ .sidebar-backdrop { display: block; }
@@ -199,7 +206,6 @@ tfoot td { padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--t
   .stats-grid, .stats-grid-2 { grid-template-columns: 1fr; gap: 12px; }
   .content-row { grid-template-columns: 1fr; gap: 16px; }
   .stat-value { font-size: 28px; }
-  .page-header { margin-bottom: 20px; }
   .page-title h2 { font-size: 22px; }
   table, thead, tbody, th, td, tr { display: block; }
   thead { display: none; }
