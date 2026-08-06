@@ -98,12 +98,15 @@ body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-dark); col
   margin-bottom: 24px; 
   flex-wrap: wrap; 
   gap: 16px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://i.ibb.co/GfngNgG5/logo.png');
-  background-size: cover; 
-  background-position: center; 
+  /* Overlay dikurangi dari 0.7 menjadi 0.3 agar gambar lebih keluar */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://i.ibb.co/GfngNgG5/logo.png');
+  background-color: #111; /* Warna dasar gelap */
+  background-size: 80px 80px; /* Gambar diperkecil */
+  background-repeat: no-repeat;
+  background-position: right center; /* Logo diletakkan di kanan */
   border: 1px solid var(--border-gold);
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 16px 24px; /* Padding diperkecil agar box lebih ramping */
 }
 .page-title h2 { font-size: 24px; font-weight: 800; font-family: 'Playfair Display', serif; color: var(--gold); }
 .page-title p { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
